@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>BeerBliotek</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./bootstrap/dist/css/bootstrap.css">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="_js/api.js"></script>
+        <script src="_js/post.js"></script>
+        <script src="_js/navbar.js"></script>
+        <script src="https://kit.fontawesome.com/c683b63fb4.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div class="container-fluid" style='margin-bottom: 1rem;'>
+        <nav class="navbar navbar-light bg-light">
+        <a href='index.html' class="navbar-brand">BeerBliotek</a>
+        <form id="search-form" class="filter-input" novalidate>
+            <input class="navbar-input form-control mr-sm-2" id="input.search" required type="search" data-pattern-mismatch="Input invalid" placeholder="Name or mm/aaaa" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 button search" type="submit">Beer Finder</button>
+        </form>
+        </nav>
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <picture>
+                        <source media="(min-width: 600px)" class="d-block w-100" srcset="/_img/beer600.png">
+                        <source media="(min-width: 465px)" class="d-block w-100" srcset="/_img/beer465.png">
+                        <img src="/_img/beer1080.png" class="d-block w-100" alt="BeerBliotek">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="principal">
+        <script text="text/javascript">lStorage()</script>
+    </div>
+    </body>
+</html>
