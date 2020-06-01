@@ -1,4 +1,6 @@
-function lStorage () {
+import { templateBeers } from "./api.js"
+
+function lStorage() {
 
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('input.search');
@@ -14,8 +16,10 @@ function lStorage () {
       });
 
       if (localStorage.getItem('last-search')) {
-        firstLoad(localStorage.getItem('last-search'));
+        templateBeers(localStorage.getItem('last-search'));
       } else {
-        firstLoad();
+        templateBeers();
       }
 }
+
+lStorage();
