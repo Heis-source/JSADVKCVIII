@@ -21,5 +21,3 @@ function lStorage() {
         templateBeers();
       }
 }
-
-lStorage();

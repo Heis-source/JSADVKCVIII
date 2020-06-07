@@ -39,10 +39,11 @@ function commentLoad (value) {
                 <p class="card-text">${dateHour} ${dateDay}</p>`
             }
           });
+
         document.getElementById(`commentzone`).innerHTML = comment.join('');
     })
     .catch(function(err) {
-    console.log(err);
+        console.log(err);
     })
     .then(function() {
 

@@ -21,7 +21,7 @@ const api = () => {
 
                 const dataBeers = await resp.data.beers;
 
-                if( dataBeers.length >= 1 ){
+                if (dataBeers.length >= 1 ){
                     return dataBeers;
                 }else{
                     return false;
@@ -37,84 +37,50 @@ const api = () => {
             try{
                 const config = {
                     method: 'get',
-                    url: `${apiURL}${id}`,
+                    url: `${URL}/${id}`,
                     headers: { 'X-API-KEY': API_KEY }
                 };
                 const resp = await axios(config);
 
-                if(resp.config.validateStatus == false){
+                if (resp.config.validateStatus == false){
                     new Error(`Error retrieving beers. Code error: ${resp.status}`);
                 }
 
                 const detailBeer = await resp.data.beer;
                 return detailBeer;
 
-            }catch(err){
+            } catch(err) {
                 console.log(err.message);
                 throw err;
             }
         },
 
-        /*create comment for Beer*/
-        createComment: async (id, text) => {
-            try{
-
+        likeLoad: async id => {
+            try {
                 const config = {
-                    method: "post",
-                    url: `${apiURL}${id}/comment`,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-KEY': API_KEY
-                    },
-                    data: {
-                        comment : text
-                    }
-                };
-
+                    method: 'post',
+                    url: `${URL}/${id}/like`,
+                    headers: { 'X-API-KEY': API_KEY }
+                }
+                console.log(config.url)
                 const resp = await axios(config);
-
-                /*if code distintc 200 or 300:*/
-                if(resp.config.validateStatus == false){
+    
+                if (resp.config.validateStatus == false){
                     new Error(`Error retrieving beers. Code error: ${resp.status}`);
                 }
-
-                return resp;
-
-            }catch(err){
-                console.log(err.message);
-                throw err;
-            }
-        },
-
-        /*create like in detail Beer*/
-        createLike: async id => {
-            try{
-                const config = {
-                    method: "post",
-                    url: `${apiURL}${id}/like`,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-KEY': API_KEY
-                    }
-                };
-
-                const resp = await axios(config);
-
-                /*if code distintc 200 or 300:*/
-                if(resp.config.validateStatus == false){
-                    new Error(`Error retrieving beers. Code error: ${resp.status}`);
+                
+                if (resp) {
+                    const beers = resp.data.beer;
+                    document.getElementById("like-text").innerHTML = beers.likes + `<a href='#/' onclick="${likeLoad(beers.beerId)}"><i class="fas fa-thumbs-up rounded float-right"></i></a></p>`;
                 }
 
-                const likes = resp.data.beer.likes;
-
-                return likes;
-
-            }catch(err){
+                console.log("hola");
+            } catch(err) {
                 console.log(err.message);
                 throw err;
             }
         }
-    };
-};
+    }
+}
 
 export default api;
