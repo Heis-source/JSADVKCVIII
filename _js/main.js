@@ -1,13 +1,9 @@
 import { templateBeers, showDetails } from './api.js';
-
-
-/* get value saved in local storage, default is lStorage */
-//const { getItem } = storage(STORAGE_TYPE);
+import { lStorage } from './navbar.js';
 
 page("/", () => {
-    templateBeers();
+    templateBeers(localStorage.getItem('last-search'));
 });
-
 page("/details/:id", (ctx) => {
     const { params: {id} } = ctx;
     showDetails(id);

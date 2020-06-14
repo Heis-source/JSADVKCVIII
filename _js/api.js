@@ -1,6 +1,39 @@
 import api from './modules/api.js';
+import { commentLoad } from './navbar.js';
 
-const { getBeers, getBeerDetail, likeLoad } = api();
+const { getBeers, getBeerDetail, likeLoad, createComment } = api();
+
+const likeBeer = id => {
+  const buttonLike = document.querySelector("#btn-like");
+
+  buttonLike.addEventListener("click", async (evt) => {
+    evt.preventDefault();
+    const respLikes = await likeLoad(id);
+  });
+};
+
+
+const sendComment = id => {
+  const sendCommentForm = document.querySelector("#commentform");
+  const commentText = document.querySelector("#commenttext");
+
+  sendCommentForm.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+    console.log(commentText);
+    console.log(newCommentText);
+    const respLikes = await createComment(id, commentText);
+  });
+};
+
+
+const arrayReader = (array) => {
+  const arrayReader = array.map( (i) => {
+      return i.name;
+  }).join(", ");
+
+  return arrayReader;
+}
+
 
 export const templateBeers = async () => {
   getBeers().then(data => {
@@ -27,24 +60,6 @@ export const templateBeers = async () => {
   })
 }
 
-const arrayReader = (array) => {
-  const arrayReader = array.map( (i) => {
-      return i.name;
-  }).join(", ");
-
-  return arrayReader;
-}
-
-const commentLoad = (array) => {
-  const commentLoader = array.map( (i) => {
-    return `
-      <p class="card-text">${i.comment}</p>
-      <p class="card-text">${i.dateComment}</p>`
-  }).join(' ');
-
-  return commentLoader;
-}
-
 export const showDetails = async id => {
   getBeerDetail(id).then(beer => {
 
@@ -68,7 +83,7 @@ export const showDetails = async id => {
             <div class='col'>
               <p class="card-text"><strong>Year:</strong> <span>${beer.firstBrewed}</span></p> 
               <p class="card-text"><strong>Price:</strong> <span>${beer.price} €</span></p>
-              <p class="card-text"><strong>Likes:</strong> <span id="like-text">${beer.likes}<a href='' id="like"><i class="fas fa-thumbs-up rounded float-right"></i></a></p>
+              <p class="card-text"><strong>Likes:</strong> <span id="like-text">${beer.likes}</span><a href='#' id="btn-like"><i class="fas fa-thumbs-up rounded float-right"></i></a></p>
             </div>
           </div>
         </div>
@@ -103,7 +118,7 @@ export const showDetails = async id => {
               <div class='col'>
                   <p class="card-text">Malt</p>
                   <ul>
-                  ${arrayReader(maltBeer)}
+                    ${arrayReader(maltBeer)}
                   </ul>
               </div>
             </div>
@@ -135,55 +150,23 @@ export const showDetails = async id => {
       <div class='col'>
         <div class="card">
           <div class="card-body">
-            <form id="commentform">
+            <form id="commentform" novalidate>
               <h5>New post</h5>
-              <textarea class="form-control control" placeholder="Feedback area! Fell Free!" required id="commenttext"></textarea>
-              <input type="submit" id="commentsend" class="btn btn-primary controlbutton" onclick="commentSend(${beer.beerId})">
+              <textarea class="form-control" id="form-textarea" placeholder="Feedback!"></textarea>
+              <input type="submit" class="btn btn-primary controlbutton">
             </form>
           </div>
         </div>
       </div>
     </div>`;
 
-    document.getElementById("like").addEventListener('click', function() { likeLoad }, false);
-
     const detailList = document.getElementById(`principal`).innerHTML = templateDetailBeers;
+
+    likeBeer(id);
+
     return `
       <div class="row row-cols-1 row-cols-md-2">
         ${detailList}
       </div>`;
-
   });
-}
-
-function commentSend(id) {
-  const commentText = document.getElementById("commenttext");
-  const quoteInput = document.getElementById("commentform");
-  console.log(commentText)
-  console.log(id)
-
-  quoteInput.addEventListener('submit', async evt => {
-      evt.preventDefault();
-  });
-
-  axios.post(URL + `/${id}/comment`, { comment : commentText })
-
-  .then(function(response) {
-      const beers = response.data.beer;
-      const comment = beers.comments.map(result => {
-          const dateHour = result.dateComment.slice(11,19);
-          const dateDay = result.dateComment.slice(0,10);
-              if (result) {
-                  return `
-                  <p class="card-text">${result.comment}</p>
-                  <p class="card-text">${dateHour} ${dateDay}</p>`
-              }
-      });
-
-      document.getElementById(`commentzone`).innerHTML = comment.join('');
-  })
-  .catch(function(err) {
-      console.log(err.message);
-      throw err;
-  })
 }

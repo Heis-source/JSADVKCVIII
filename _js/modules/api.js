@@ -1,4 +1,5 @@
 import { URL, API_KEY } from "./constants/beerbliotekAPI.js" ;
+import { commentLoad } from '../navbar.js';
 
 const api = () => {
 
@@ -23,11 +24,11 @@ const api = () => {
 
                 if (dataBeers.length >= 1 ){
                     return dataBeers;
-                }else{
+                } else {
                     return false;
                 }
 
-            } catch(err) {
+            } catch (err) {
                 console.log(err.message);
                 throw err;
             }
@@ -62,7 +63,6 @@ const api = () => {
                     url: `${URL}/${id}/like`,
                     headers: { 'X-API-KEY': API_KEY }
                 }
-                console.log(config.url)
                 const resp = await axios(config);
     
                 if (resp.config.validateStatus == false){
@@ -71,15 +71,45 @@ const api = () => {
                 
                 if (resp) {
                     const beers = resp.data.beer;
-                    document.getElementById("like-text").innerHTML = beers.likes + `<a href='#/' onclick="${likeLoad(beers.beerId)}"><i class="fas fa-thumbs-up rounded float-right"></i></a></p>`;
+                    document.getElementById("like-text").innerHTML = beers.likes;
                 }
 
-                console.log("hola");
             } catch(err) {
                 console.log(err.message);
                 throw err;
             }
-        }
+        },
+
+        createComment: async (id, text) => {
+            try{
+                const config = {
+                    method: "post",
+                    url: `${URL}/${id}/comment`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': API_KEY
+                    },
+                    data: {
+                        comment : text
+                    }
+                };
+
+                const resp = await axios(config);
+
+                if (resp.config.validateStatus == false){
+                    new Error(`Error retrieving beers. Code error: ${resp.status}`);
+                }
+
+                if (resp) {
+                    const commentBeer = resp.comments;
+                    commentLoad(commentBeer);
+                }
+
+            } catch(err) {
+                console.log(err.message);
+                throw err;
+            }
+        },
     }
 }
 
