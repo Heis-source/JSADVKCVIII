@@ -1,5 +1,5 @@
 import { URL, API_KEY } from "./constants/beerbliotekAPI.js" ;
-import { commentLoad } from '../navbar.js';
+import { commentLoad } from './functions.js';
 
 const api = () => {
 
@@ -11,14 +11,10 @@ const api = () => {
             try {
                 const config = {
                     method: 'get',
-                    url: search ? `${searchAPIUrlEndpoint}=${search}&limit=10` : beersAPIUrlEndpoint,
+                    url: search ? `${searchAPIUrlEndpoint}=${search}` : beersAPIUrlEndpoint,
                     headers: { 'X-API-KEY': API_KEY }
                 };
                 const resp = await axios(config);
-
-                if(resp.config.validateStatus == false){
-                   new Error(`Error retrieving beers. Code error: ${resp.status}`);
-                }
 
                 const dataBeers = await resp.data.beers;
 
@@ -43,10 +39,6 @@ const api = () => {
                 };
                 const resp = await axios(config);
 
-                if (resp.config.validateStatus == false){
-                    new Error(`Error retrieving beers. Code error: ${resp.status}`);
-                }
-
                 const detailBeer = await resp.data.beer;
                 return detailBeer;
 
@@ -64,10 +56,6 @@ const api = () => {
                     headers: { 'X-API-KEY': API_KEY }
                 }
                 const resp = await axios(config);
-    
-                if (resp.config.validateStatus == false){
-                    new Error(`Error retrieving beers. Code error: ${resp.status}`);
-                }
                 
                 if (resp) {
                     const beers = resp.data.beer;
@@ -95,10 +83,6 @@ const api = () => {
                 };
 
                 const resp = await axios(config);
-
-                if (resp.config.validateStatus == false){
-                    new Error(`Error retrieving beers. Code error: ${resp.status}`);
-                }
 
                 if (resp) {
                     const commentBeer = resp.comments;

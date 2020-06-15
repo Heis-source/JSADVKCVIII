@@ -1,5 +1,7 @@
-import { templateBeers, showDetails } from './api.js';
-import { lStorage } from './navbar.js';
+import { templateBeers, showDetails } from './renders.js';
+import lStorage from './modules/storage.js';
+
+lStorage();
 
 page("/", () => {
     templateBeers(localStorage.getItem('last-search'));

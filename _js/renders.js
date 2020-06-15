@@ -1,5 +1,5 @@
 import api from './modules/api.js';
-import { commentLoad } from './navbar.js';
+import { commentLoad } from './modules/functions.js';
 
 const { getBeers, getBeerDetail, likeLoad, createComment } = api();
 
@@ -11,7 +11,6 @@ const likeBeer = id => {
     const respLikes = await likeLoad(id);
   });
 };
-
 
 const sendComment = id => {
   const sendCommentForm = document.querySelector("#commentform");
@@ -25,7 +24,6 @@ const sendComment = id => {
   });
 };
 
-
 const arrayReader = (array) => {
   const arrayReader = array.map( (i) => {
       return i.name;
@@ -35,9 +33,16 @@ const arrayReader = (array) => {
 }
 
 
-export const templateBeers = async () => {
-  getBeers().then(data => {
+export const templateBeers = async value => {
+
+  const filtered = [];
+  const lStore = localStorage.getItem("last-search");
+  console.log(value);
+
+  getBeers(value).then(data => {
     const dataBeers = data.map(beer => {
+      filtered.push('1');
+      console.log(filtered);
       return `
         <div class="col mb-4">
           <div class="card">
