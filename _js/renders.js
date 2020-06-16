@@ -35,14 +35,25 @@ const arrayReader = (array) => {
 
 export const templateBeers = async value => {
 
+  //const control = 0;
   const filtered = [];
   const lStore = localStorage.getItem("last-search");
-  console.log(value);
-
+  
   getBeers(value).then(data => {
-    const dataBeers = data.map(beer => {
-      filtered.push('1');
-      console.log(filtered);
+    const dataBeersNoFilter = data.map(beer => {
+      if (beer.firstBrewed === lStore) {
+        filtered.push(beer);
+        console.log("hola")
+      } else if (value) {
+        filtered.push(beer);
+        console.log("hola2")
+      } else if (!value && lStore === null) {
+        filtered.push(beer);
+        console.log("hola3")
+      }
+    })
+    console.log(filtered);
+    const dataBeers = filtered.map(beer => {
       return `
         <div class="col mb-4">
           <div class="card">

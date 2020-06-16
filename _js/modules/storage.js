@@ -12,9 +12,9 @@ function lStorage() {
       localStorage.setItem('last-search', searchInput.value);
       const lStore = localStorage.getItem('last-search');
 
-      if (lStore.indexOf("/") == 2) {
+      if (lStore.includes("/")) {
         templateBeers();
-      } else if (lStore.indexOf("/") == -1) {
+      } else if (!lStore.includes("/")) {
         templateBeers(lStore);
       }
 

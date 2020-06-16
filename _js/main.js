@@ -2,6 +2,7 @@ import { templateBeers, showDetails } from './renders.js';
 import lStorage from './modules/storage.js';
 
 lStorage();
+window.onload = window.localStorage.clear();
 
 page("/", () => {
     templateBeers(localStorage.getItem('last-search'));
