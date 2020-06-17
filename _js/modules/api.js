@@ -4,7 +4,7 @@ import { commentLoad } from './functions.js';
 const api = () => {
 
     const searchAPIUrlEndpoint = `${URL}?search`;
-    const beersAPIUrlEndpoint = `${URL}?limit=10`;
+    const beersAPIUrlEndpoint = `${URL}`;
 
     return {
         getBeers: async search => {
@@ -85,8 +85,8 @@ const api = () => {
                 const resp = await axios(config);
 
                 if (resp) {
-                    const commentBeer = resp.comments;
-                    commentLoad(commentBeer);
+                    const commentBeer = resp.data.beer.comments;
+                    document.getElementById(`commentzone`).innerHTML = commentLoad(commentBeer)
                 }
 
             } catch(err) {

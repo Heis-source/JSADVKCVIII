@@ -1,58 +1,56 @@
 import api from './modules/api.js';
-import { commentLoad } from './modules/functions.js';
+import { commentLoad, arrayReader } from './modules/functions.js';
 
 const { getBeers, getBeerDetail, likeLoad, createComment } = api();
+
+// Like sum
 
 const likeBeer = id => {
   const buttonLike = document.querySelector("#btn-like");
 
   buttonLike.addEventListener("click", async (evt) => {
     evt.preventDefault();
-    const respLikes = await likeLoad(id);
-  });
-};
+    await likeLoad(id);
+  })
+}
+
+//Save comments
 
 const sendComment = id => {
-  const sendCommentForm = document.querySelector("#commentform");
-  const commentText = document.querySelector("#commenttext");
+  const sendCommentForm = document.getElementById("commentform");
 
-  sendCommentForm.addEventListener("submit", async (evt) => {
-    evt.preventDefault();
-    console.log(commentText);
-    console.log(newCommentText);
-    const respLikes = await createComment(id, commentText);
-  });
-};
-
-const arrayReader = (array) => {
-  const arrayReader = array.map( (i) => {
-      return i.name;
-  }).join(", ");
-
-  return arrayReader;
+  if (sendCommentForm) {
+    sendCommentForm.addEventListener("submit", async (evt) => {
+      const commentText = document.getElementById("form-textarea").value;
+      evt.preventDefault();
+      await createComment(id, commentText);
+    })
+  }
 }
 
 
+// Rendering beers and front filtering
+
 export const templateBeers = async value => {
 
-  //const control = 0;
+  let control = 0;
   const filtered = [];
   const lStore = localStorage.getItem("last-search");
   
   getBeers(value).then(data => {
     const dataBeersNoFilter = data.map(beer => {
-      if (beer.firstBrewed === lStore) {
+      if (beer.firstBrewed === lStore && control <= 9) {
         filtered.push(beer);
-        console.log("hola")
-      } else if (value) {
+        control++;
+      } else if (value && control <= 9) {
         filtered.push(beer);
-        console.log("hola2")
-      } else if (!value && lStore === null) {
+        control++;
+      } else if (!value && lStore === null && control <= 9) {
         filtered.push(beer);
-        console.log("hola3")
+        control++;
       }
     })
-    console.log(filtered);
+
     const dataBeers = filtered.map(beer => {
       return `
         <div class="col mb-4">
@@ -76,11 +74,15 @@ export const templateBeers = async value => {
   })
 }
 
+
+// Rendering Details
+
 export const showDetails = async id => {
   getBeerDetail(id).then(beer => {
 
     const hopsBeer = beer.ingredients.hops;
     const maltBeer = beer.ingredients.malt;
+    const yeastBeer = beer.ingredients.yeast;
     const commentBeer = beer.comments;
 
     let templateDetailBeers = `
@@ -128,7 +130,7 @@ export const showDetails = async id => {
               <div class='col'>
                   <p class="card-text">Hops</p>
                   <ul>
-                    ${arrayReader(hopsBeer)}
+                  ${arrayReader(hopsBeer)}
                   </ul>
               </div>
               <div class='col'>
@@ -142,7 +144,7 @@ export const showDetails = async id => {
               <div class='col'>
                   <p class="card-text">Yeast</p>
                   <ul>
-                    <li></li>
+                    <li>${yeastBeer}</li>
                   </ul>
               </div>
             </div>
@@ -178,11 +180,11 @@ export const showDetails = async id => {
 
     const detailList = document.getElementById(`principal`).innerHTML = templateDetailBeers;
 
-    likeBeer(id);
-
     return `
+      ${likeBeer(id)}
+      ${sendComment(id)}
       <div class="row row-cols-1 row-cols-md-2">
         ${detailList}
       </div>`;
-  });
+  })
 }
